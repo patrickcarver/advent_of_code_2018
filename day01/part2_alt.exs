@@ -28,13 +28,15 @@ defmodule Day01.Part2Alt do
 
     case MapSet.member?(state.seen, result) do
       true -> 
-        { :halt, result }
+        {:halt, result}
       false ->
-        new_seen = MapSet.put(state.seen, result)
-        new_state = %Part2Alt{current: result, seen: new_seen}
-        { :cont, new_state }
+        updated_seen = MapSet.put(state.seen, result)
+        updated_state = %Part2Alt{current: result, seen: updated_seen}
+        {:cont, updated_state}
     end
   end
+
+
 end
 
 Day01.Part2Alt.run()
