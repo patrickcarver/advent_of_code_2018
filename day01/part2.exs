@@ -1,4 +1,6 @@
 defmodule Day01.Part2 do
+  # Run in iex
+
   def run() do
     change_list = get_frequency_change_list()
     find_first_frequency_reached_twice(0, change_list, MapSet.new())
