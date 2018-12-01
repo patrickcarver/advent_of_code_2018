@@ -2,7 +2,9 @@ defmodule Day01.Part2Alt do
   defstruct [current: 0, seen: MapSet.new]
 
   def run() do
-    IO.puts get_result()
+    # I could put IO.inspect with in the pipeline in get_result,
+    # but I like having my output separate from my calculation.
+    IO.inspect get_result()
   end
 
   defp get_result() do
