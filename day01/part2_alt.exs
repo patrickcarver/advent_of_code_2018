@@ -1,4 +1,6 @@
 defmodule Day01.Part2Alt do
+  alias __MODULE__
+
   defstruct [current: 0, seen: MapSet.new]
 
   def run() do
@@ -12,7 +14,7 @@ defmodule Day01.Part2Alt do
       |> File.stream!()
       |> Stream.map(&(&1 |> String.trim_trailing() |> String.to_integer()))
       |> Stream.cycle()
-      |> Enum.reduce_while(%__MODULE__{}, &find_first_frequency_reached_twice/2) 
+      |> Enum.reduce_while(%Part2Alt{}, &find_first_frequency_reached_twice/2) 
   end
 
   defp find_first_frequency_reached_twice(frequency, state) do
@@ -23,7 +25,7 @@ defmodule Day01.Part2Alt do
         { :halt, result }
       false ->
         new_seen = MapSet.put(state.seen, result)
-        new_state = %__MODULE__{current: result, seen: new_seen}
+        new_state = %Part2Alt{current: result, seen: new_seen}
         { :cont, new_state }
     end
   end
