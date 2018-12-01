@@ -1,11 +1,13 @@
 defmodule Day01.Part2Alt do
-  # Run in iex
-
   defstruct [current: 0, seen: MapSet.new]
 
   def run() do
+    IO.puts get_result()
+  end
+
+  defp get_result() do
     get_frequency_change_stream()
-    |> Enum.reduce_while(%__MODULE__{}, &find_first_frequency_reached_twice/2) 
+    |> Enum.reduce_while(%__MODULE__{}, &find_first_frequency_reached_twice/2)   
   end
 
   defp get_frequency_change_stream() do
@@ -29,3 +31,5 @@ defmodule Day01.Part2Alt do
     end
   end
 end
+
+Day01.Part2Alt.run()
