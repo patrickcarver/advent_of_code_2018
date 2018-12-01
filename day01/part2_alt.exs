@@ -12,9 +12,15 @@ defmodule Day01.Part2Alt do
   defp get_result() do
       "input.txt"
       |> File.stream!()
-      |> Stream.map(&(&1 |> String.trim_trailing() |> String.to_integer()))
+      |> Stream.map(&to_int/1)
       |> Stream.cycle()
       |> Enum.reduce_while(%Part2Alt{}, &find_first_frequency_reached_twice/2) 
+  end
+
+  defp to_int(value) do
+    value
+    |> String.trim_trailing()
+    |> String.to_integer()
   end
 
   defp find_first_frequency_reached_twice(frequency, state) do
