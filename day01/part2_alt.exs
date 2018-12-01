@@ -35,8 +35,6 @@ defmodule Day01.Part2Alt do
         {:cont, updated_state}
     end
   end
-
-
 end
 
 Day01.Part2Alt.run()
