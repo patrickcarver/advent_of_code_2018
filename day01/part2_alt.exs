@@ -9,7 +9,6 @@ defmodule Day01.Part2Alt do
 
   defp get_result() do
       "input.txt"
-      |> Path.expand(__DIR__)
       |> File.stream!()
       |> Stream.map(&(&1 |> String.trim_trailing() |> String.to_integer()))
       |> Stream.cycle()
