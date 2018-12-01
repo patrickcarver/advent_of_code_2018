@@ -6,16 +6,12 @@ defmodule Day01.Part2Alt do
   end
 
   defp get_result() do
-    get_frequency_change_stream()
-    |> Enum.reduce_while(%__MODULE__{}, &find_first_frequency_reached_twice/2)   
-  end
-
-  defp get_frequency_change_stream() do
       "input.txt"
       |> Path.expand(__DIR__)
       |> File.stream!()
       |> Stream.map(&(&1 |> String.trim_trailing() |> String.to_integer()))
       |> Stream.cycle()
+      |> Enum.reduce_while(%__MODULE__{}, &find_first_frequency_reached_twice/2) 
   end
 
   defp find_first_frequency_reached_twice(frequency, state) do
