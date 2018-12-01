@@ -12,7 +12,6 @@ defmodule Day01.Part2 do
 
   defp get_frequency_change_list() do
       "input.txt"
-      |> Path.expand(__DIR__)
       |> File.stream!()
       |> Stream.map(&(&1 |> String.trim_trailing() |> String.to_integer()))
       |> Enum.to_list()
