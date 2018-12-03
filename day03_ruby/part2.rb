@@ -18,7 +18,6 @@ File.foreach("input.txt") do |line|
 	      	end
 	    end
   	end
-
 end
 
 have_only_one = grid.values.select { |arr| arr.length == 1 }.flatten.uniq
