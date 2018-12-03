@@ -19,13 +19,23 @@ defmodule Day02.Part2 do
 
   defp find_with_difference_of_one_letter(head, tail) do
     tail
-    |> Enum.map(fn candidate -> 
-        zipped = Enum.zip(head, candidate)
-        diff = Enum.reject(zipped, &do_tuple_elements_match?/1) |> Kernel.length
-        {zipped, diff} 
-      end)
+    |> create_list_of_zipped_tuples(head)
     |> Enum.filter(fn {_zipped, diff} -> diff == 1 end)
     |> List.first  
+  end
+
+  defp create_list_of_zipped_tuples(tail, head) do
+    Enum.map(tail, fn candidate -> 
+      zipped = Enum.zip(head, candidate)
+      diff = get_diff(zipped)
+      {zipped, diff} 
+    end)    
+  end
+
+  defp get_diff(zipped) do
+    zipped
+    |> Enum.reject(&do_tuple_elements_match?/1) 
+    |> Kernel.length
   end
 
   defp do_tuple_elements_match?({first, second}), do: first == second
