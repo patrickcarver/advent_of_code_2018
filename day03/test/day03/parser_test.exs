@@ -4,7 +4,7 @@ defmodule Day03.ParserTest do
   alias Day03.Parser
 
   setup_all do
-    parsed_list = Parser.parse("../../txt/input.txt") 
+    parsed_list = Parser.parse("../../txt/input.txt")
 
     {:ok, parsed_list: parsed_list}
   end

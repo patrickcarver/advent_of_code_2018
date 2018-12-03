@@ -11,14 +11,14 @@ defmodule Day03.Parser do
         |> String.split(": ")
         |> create_claim()
     end)
-    |> Enum.to_list()
+    |> Enum.to_list
   end
 
   defp create_claim([start, size]) do
-    {x, y} = create_start_coords(start)
+    {start_x, start_y} = create_start_coords(start)
     {width, height} = create_size_data(size)
-
-    %{start: {x, y}, size: {width, height}}
+    {end_x, end_y} = {start_x + width, start_y + height}
+    
   end
 
   defp create_start_coords(start) do
