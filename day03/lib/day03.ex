@@ -3,6 +3,6 @@ defmodule Day03 do
   
   def run() do
     Part1.run()
-    Part2.run()
+    #Part2.run()
   end
 end
