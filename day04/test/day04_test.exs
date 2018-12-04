@@ -1,7 +1,7 @@
 defmodule Day04Test do
   use ExUnit.Case
 
-  alias DayO4.{FileLoader, Part1}
+  alias DayO4.Part1
 
   setup_all do
     { :ok, file_name: "../../txt/test.txt" }
