@@ -1,8 +1,14 @@
 defmodule Day04Test do
   use ExUnit.Case
-  doctest Day04
 
-  test "greets the world" do
-    assert Day04.hello() == :world
+  alias DayO4.{FileLoader, Part1}
+
+  setup_all do
+    { :ok, file_name: "../../txt/test.txt" }
+  end
+
+  test "Day04.Part1.do_run loads from test.txt", context do
+    actual = Part1.do_run(context[:file_name])
+    refute actual == nil
   end
 end
