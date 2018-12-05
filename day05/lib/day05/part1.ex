@@ -5,6 +5,11 @@ defmodule Day05.Part1 do
     file_name
     |> FileLoader.load()
     |> create_letter_list()
+    |> total_remaining_units()
+  end
+
+  def total_remaining_units(letters) do
+    letters
     |> Enum.reduce([], &compare/2)
     |> Enum.count()
   end
