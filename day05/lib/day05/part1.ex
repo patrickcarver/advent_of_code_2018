@@ -5,29 +5,30 @@ defmodule Day05.Part1 do
     file_name
     |> FileLoader.load()
     |> create_letter_list()
-    |> Enum.reduce([], fn current, seen  ->
-      first_in_seen = List.first(seen)
-
-      if first_in_seen == nil do
-        [current | seen]
-      else
-        if can_react?(current, first_in_seen) do
-          [_ | tail] = seen
-          tail
-        else
-          [current | seen]
-        end
-      end
-    end)
+    |> Enum.reduce([], &compare/2)
     |> Enum.count()
   end
 
+  defp compare(current, seen) do
+    first_in_seen = List.first(seen)
+    reacted = can_react?(current, first_in_seen)
+    update_seen(seen, current, reacted)
+  end
 
+  defp update_seen(seen, current, false) do
+    [current | seen]
+  end
 
+  defp update_seen(seen, _current, true) do
+    tl(seen)
+  end
 
+  defp can_react?(_current, nil) do
+    false
+  end
 
-  defp can_react?(first, second) do
-    difference(first, second) == 32
+  defp can_react?(current, first_in_seen) do
+    difference(current, first_in_seen) == 32
   end
 
   defp difference(first, second) do
