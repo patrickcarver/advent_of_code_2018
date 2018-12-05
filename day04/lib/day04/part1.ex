@@ -12,13 +12,13 @@ defmodule Day04.Part1 do
   #   b) what minute does that guard sleep the most?
   # ALSO: our input isn't in order. we need to sort that first
 
-  alias Day04.Part1.{GuardRecordList, Processor}
+  alias Day04.Part1.{GuardRecordList, Processor, Answer}
 
   def run(file) do
     file
     |> GuardRecordList.read()
-    |> Processor.process()
-    |> calculate_answer()
+    |> Processor.process() # great name. seriously, the best.
+    |> Answer.calculate()
   end
 
   defp calculate_answer(records) do
