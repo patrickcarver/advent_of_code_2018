@@ -7,14 +7,14 @@ defmodule Day04.Part1.Answer do
     |> create_minute_list()
     |> count_minute_occurances()
     |> find_largest_occurance_count()
-    |> multiple_id_and_minute()
+    |> multiply_id_and_minute()
   end
 
-  defp multiple_id_and_minute({id, count}) do
+  def multiply_id_and_minute({id, count}) do
     id * count
   end
 
-  defp find_largest_occurance_count({id, counts}) do
+  def find_largest_occurance_count({id, counts}) do
     minute = Enum.reduce(counts, {0, 0}, fn current, largest ->
       {_, current_count} = current
       {_, largest_count} = largest
@@ -28,7 +28,7 @@ defmodule Day04.Part1.Answer do
     {id, minute}
   end
 
-  defp count_minute_occurances({id, range}) do
+  def count_minute_occurances({id, range}) do
     counts = Enum.reduce(range, %{}, fn minute, acc ->
       Map.update(acc, minute, 1, &(&1 + 1))
     end)
@@ -36,7 +36,7 @@ defmodule Day04.Part1.Answer do
     {id, counts}
   end
 
-  defp create_minute_list({id, times}) do
+  def create_minute_list({id, times}) do
     ranges =
       times
       |> Enum.map(fn {asleep_minute, awake_minute} ->
@@ -47,11 +47,11 @@ defmodule Day04.Part1.Answer do
     {id, ranges}
   end
 
-  defp collapse_tuple({id, %{times: times}}) do
+  def collapse_tuple({id, %{times: times}}) do
     {id, times}
   end
 
-  defp remove_total(record) do
+  def remove_total(record) do
     {id, %{times: times}} = record
     {id, %{times: times}}
   end

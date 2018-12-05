@@ -19,6 +19,7 @@ defmodule Day04 do
 
     case part do
       1 -> Day04.Part1.run(input_file)
+      2 -> Day04.Part2.run(input_file)
       _ -> nil
     end
   end
