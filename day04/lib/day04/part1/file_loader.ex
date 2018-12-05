@@ -1,6 +1,6 @@
-defmodule Day04.FileLoader do
+defmodule Day04.Part1.FileLoader do
   def load(file_name) do
-    file_name
+    "../../../txt/" <> file_name
     |> Path.expand(__DIR__)
     |> File.stream!()
   end
