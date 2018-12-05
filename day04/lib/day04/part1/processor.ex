@@ -32,6 +32,7 @@ defmodule Day04.Part1.Processor do
   end
 
   def process([], current_record, records) do
+    # adds the last
     RecordUpdater.update(records, current_record)
   end
 
