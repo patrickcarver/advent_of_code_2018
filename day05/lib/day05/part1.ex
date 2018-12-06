@@ -48,7 +48,7 @@ defmodule Day05.Part1 do
 
   defp create_letter_list(file_stream) do
     file_stream
-    |> Enum.map(&String.trim_trailing/1)
+    |> Enum.to_list()
     |> List.first()
     |> String.codepoints()
   end
