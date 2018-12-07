@@ -3,6 +3,6 @@ defmodule Day06.FileLoader do
     "../../txt/" <> file_name
     |> Path.expand(__DIR__)
     |> File.stream!()
-    |> Enum.to_list()
+    |> Enum.map(&String.trim_trailing/1)
   end
 end
