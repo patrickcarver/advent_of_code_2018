@@ -3,14 +3,10 @@ defmodule Day06.Part1 do
 
   def run(file_name) do
     inputs = get_inputs(file_name)
-
     bounds = find_bounds(inputs)
-
     coords = generate_coords(bounds, inputs)
-
     counts = create_map(inputs)
 
-  #  map = create_map(inputs)
     Enum.map(coords, fn coord ->
       distances = Enum.map(inputs, fn input -> manhattan_distance(coord, input) end)
       zipped = Enum.zip(inputs, distances)
@@ -33,21 +29,6 @@ defmodule Day06.Part1 do
     |> Enum.map(fn {_input, coords} -> Enum.count(coords) + 1 end)
     |> Enum.max()
 
-#    |> Enum.map(fn {key, value} -> {key, Enum.count(value) + 1} end)
-#    |> Enum.reduce(%{}, fn {key, value}, acc -> Map.put(acc, key, value) end)
-#    |> Map.delete(:tied)
-
-# are any coords on the edge?
-
-
-
-    # create map with inputs as keys, init value empty list that will store coords that are closest to input
-
-    # iterate each coords in bounds
-      # calculate manhattan distance between coord and all inputs -> list
-      # sort results
-      # if the first and second elements in results are equal, then it is tied -> throw away
-      # otherwise
   end
 
   def create_map(inputs) do
@@ -56,6 +37,12 @@ defmodule Day06.Part1 do
     end)
 
     Map.put(map, :tied, [])
+  end
+
+  def create_counts(inputs) do
+    Enum.reduce(inputs, %{}, fn coord, map ->
+      Map.put(map, coord, [])
+    end)
   end
 
   def generate_coords({x_range, y_range}, inputs) do
@@ -72,9 +59,9 @@ defmodule Day06.Part1 do
   def find_bounds_for_axis(inputs, sorter, getter) do
     inputs
     |> Enum.sort(sorter)
+    |> Enum.map(getter)
     |> Enum.min_max()
     |> Tuple.to_list()
-    |> Enum.map(getter)
   end
 
   def get_x([x, _]), do: x
