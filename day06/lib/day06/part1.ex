@@ -7,6 +7,7 @@ defmodule Day06.Part1 do
     coords = generate_coords(bounds, inputs)
     counts = create_map(inputs)
 
+    # Hot garbage
     Enum.map(coords, fn coord ->
       distances = Enum.map(inputs, fn input -> manhattan_distance(coord, input) end)
       zipped = Enum.zip(inputs, distances)
@@ -37,12 +38,6 @@ defmodule Day06.Part1 do
     end)
 
     Map.put(map, :tied, [])
-  end
-
-  def create_counts(inputs) do
-    Enum.reduce(inputs, %{}, fn coord, map ->
-      Map.put(map, coord, [])
-    end)
   end
 
   def generate_coords({x_range, y_range}, inputs) do
