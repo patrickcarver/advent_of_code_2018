@@ -26,16 +26,18 @@ defmodule Day06.Part1 do
       new_value = [value | list]
       Map.put(acc, key, new_value)
     end)
-    |> Enum.map(fn {key, value} -> {key, Enum.count(value) + 1} end)
-    |> Enum.reduce(%{}, fn {key, value}, acc -> Map.put(acc, key, value) end)
-    |> Map.delete(:tied)
-    |> Enum.reject(fn {[x, y], _value} ->
-       {min_x..max_x, min_y..max_y} = bounds
-       x == min_x || x == max_x || y == min_y || y == max_y
+    |> Enum.reject(fn {_key, coords} ->
+      {x_min..x_max, y_min..y_max} = bounds
+      Enum.any?(coords, fn [x, y] -> x in [x_min, x_max] || y in [y_min, y_max] end)
     end)
-    |> Enum.map(fn {_list, count} -> count end)
+    |> Enum.map(fn {_input, coords} -> Enum.count(coords) + 1 end)
+    |> Enum.max()
 
+#    |> Enum.map(fn {key, value} -> {key, Enum.count(value) + 1} end)
+#    |> Enum.reduce(%{}, fn {key, value}, acc -> Map.put(acc, key, value) end)
+#    |> Map.delete(:tied)
 
+# are any coords on the edge?
 
 
 
