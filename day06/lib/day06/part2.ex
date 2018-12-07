@@ -2,26 +2,21 @@ defmodule Day06.Part2 do
   alias Day06.FileLoader
 
   def run(file_name) do
-    inputs = get_inputs(file_name)
-    bounds = find_bounds(inputs)
-    coords = generate_coords(bounds, inputs)
-
-
     max_distance = 10_000
 
+    inputs = get_inputs(file_name)
+    bounds = find_bounds(inputs)
+    coords = generate_coords(bounds)
+
     Enum.map(coords, fn coord ->
-      sum_distances =
         inputs
         |> Enum.reduce(0, fn input, sum -> manhattan_distance(coord, input) + sum end)
     end)
     |> Enum.filter(fn distance -> distance < max_distance end)
     |> Enum.count()
-
   end
 
-
-
-  def generate_coords({x_range, y_range}, inputs) do
+  def generate_coords({x_range, y_range}) do
     for x <- x_range, y <- y_range, do: [x, y]
   end
 
