@@ -1,18 +1,30 @@
 defmodule Day08 do
-  @moduledoc """
-  Documentation for Day08.
-  """
 
-  @doc """
-  Hello world.
+  alias Day08.{Part1, Part2}
 
-  ## Examples
+  def run(part: part, mode: mode) do
+    mode
+    |> get_input_file_name()
+    |> run_selected(part)
+  end
 
-      iex> Day08.hello()
-      :world
+  defp get_input_file_name(:prod), do: "input.txt"
+  defp get_input_file_name(:test), do: "test.txt"
+  defp get_input_file_name(_mode), do: {:error, :invalid_mode}
 
-  """
-  def hello do
-    :world
+  defp run_selected({:error, :invalid_mode} = error, _part) do
+    error
+  end
+
+  defp run_selected(input_file_name, 1) do
+    Part1.run(input_file_name)
+  end
+
+  defp run_selected(input_file_name, 2) do
+    Part2.run(input_file_name)
+  end
+
+  defp run_selected(_input_file_name, _invalid_part) do
+    {:error, :invalid_part}
   end
 end
