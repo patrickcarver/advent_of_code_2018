@@ -22,85 +22,59 @@ defmodule Day10.Part1 do
 
   def run(file_name) do
     file_name
+    |> init_points()
+  end
+
+  def init_points(file_name) do
+    file_name
     |> FileLoader.load()
     |> Parser.create_points()
-    |> loop()
-    |> prep_to_write()
-  #  |> write_to_file()
+  end
+
+
+  #def translate_points_for_display(points) do
+  #
+  #end
+
+  def get_bounding_box_size(bounding_box) do
+    width = abs(bounding_box.smallest_x - bounding_box.biggest_x)
+    height = abs(bounding_box.smallest_y - bounding_box.biggest_y)
+    width * height
+  end
+
+  def get_smallest(first, second), do: if first <= second, do: first, else: second
+  def get_biggest(first, second), do: if first > second, do: first, else: second
+
+  def get_bounding_box(points) do
+    bounding_box =
+      %{smallest_x: 0, smallest_y: 0, biggest_x: 0, biggest_y: 0}
+
+    points
+    |> Enum.reduce(bounding_box, fn %{position: {x, y}}, acc ->
+      new_smallest_x = get_smallest(x, acc.smallest_x)
+      new_smallest_y = get_smallest(y, acc.smallest_y)
+      new_biggest_x = get_biggest(x, acc.biggest_x)
+      new_biggest_y = get_biggest(y, acc.biggest_y)
+
+      %{
+        smallest_x: new_smallest_x,
+        smallest_y: new_smallest_y,
+        biggest_x: new_biggest_x,
+        biggest_y: new_biggest_y
+      }
+    end)
   end
 
   def write_to_file(string_to_write) do
     File.write!("../../txt/output.txt"|> Path.expand(__DIR__), string_to_write)
   end
 
-  def prep_to_write(points) do
-    positions = points |> Enum.map(fn %{position: position} -> position end)
-
-  #  sorted_by_y = positions |> Enum.sort(fn {_, first}, {_, second} -> first <= second end)
-  #  smallest_y = sorted_by_y |> List.first |> elem(1)
-  #  biggest_y = sorted_by_y |> List.last |> elem(1)
-
-  #  sorted_by_x = positions |> Enum.sort(fn {first, _}, {second, _} -> first <= second end)
-  #  smallest_x = sorted_by_x |> List.first |> elem(0)
-  #  biggest_x = sorted_by_x |> List.last |> elem(0)
-
-  #  width = abs(biggest_x) + abs(smallest_x)
-  #  height = abs(biggest_y) + abs(smallest_y)
-
- #   translated_positions = positions
- #   |> Enum.map(fn {x, y} -> {x - smallest_x, abs(y - biggest_y)} end)
- #   |> Enum.sort(fn {first, _}, {second, _} -> first <= second end)
- #   |> Enum.sort(fn {_, first}, {_, second} -> first <= second end)
-
- #   grid = init_grid(width, height)
-
- #   translated_positions
- #   |> Enum.reduce(grid, fn {x, y}, acc ->
- #    new_row = Enum.at(acc, y) |> List.replace_at(x, "#{y}")
- #    List.replace_at(acc, y, new_row)
- #   end)
-  #  |> Enum.map(fn row -> Enum.join(row, "") end)
-  #  |> Enum.join("\n")
-
-  end
-
-  def init_grid(width, height) do
-    for y <- 0..height, do: List.duplicate(" ", width + 1)
-  end
-
-  def loop(prev_points) do
-    new_points = prev_points |> apply_velocity
-    prev_size = get_bounding_box_size(prev_points)
-    new_size = get_bounding_box_size(new_points)
-
-    if prev_size > new_size do
-      loop(new_points)
-    else
-      prev_points
-    end
-  end
-
-  defp get_bounding_box_size(points) do
-    positions = points |> Enum.map(fn %{position: position} -> position end)
-
-    sorted_by_y = positions |> Enum.sort(fn {_, first}, {_, second} -> first <= second end)
-    smallest_y = sorted_by_y |> List.first |> elem(1)
-    biggest_y = sorted_by_y |> List.last |> elem(1)
-
-    sorted_by_x = positions |> Enum.sort(fn {first, _}, {second, _} -> first <= second end)
-    smallest_x = sorted_by_x |> List.first |> elem(0)
-    biggest_x = sorted_by_x |> List.last |> elem(0)
-
-    width = abs(biggest_x) + abs(smallest_x)
-    height = abs(biggest_y) + abs(smallest_y)
-
-    width * height
-  end
-
-  def apply_velocity(points) do
+  def apply_velocities(points) do
     points
-    |> Enum.map(fn %{position: {x, y}, velocity: {add_x, add_y}} ->
-      %{position: {x + add_x, y + add_y}, velocity: {add_x, add_y}}
-    end)
+    |> Enum.map(&apply_velocity/1)
+  end
+
+  def apply_velocity(%{position: {x, y}, velocity: {add_x, add_y}}) do
+    %{position: {x + add_x, y + add_y}, velocity: {add_x, add_y}}
   end
 end
