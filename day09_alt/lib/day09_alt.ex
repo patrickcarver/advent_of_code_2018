@@ -17,7 +17,7 @@ defmodule Day09Alt do
     def add_marble(marble_to_add, %{marbles: marbles, index_to_add: index_to_add, players: players}) when rem(marble_to_add, 23) == 0 do
       current_index = index_to_add - 7 - 2
 
-      {score, new_marbles} = List.pop_at(marbles, current_index)
+      {score, temp_marbles} = List.pop_at(marbles, current_index)
 
       [{player_id, high_score} | rest] = players
 
@@ -25,7 +25,10 @@ defmodule Day09Alt do
 
       new_players = rest ++ [{player_id, new_high_score}]
 
-      %{marbles: new_marbles, index_to_add: current_index + 2, players: new_players}
+      {_, new_marbles} = Enum.split(temp_marbles, current_index)
+
+
+      %{marbles: new_marbles, index_to_add: 2, players: new_players}
     end
 
     def add_marble(marble_to_add, %{marbles: marbles, index_to_add: index_to_add, players: players}) do
@@ -43,6 +46,7 @@ defmodule Day09Alt do
 
       1..limit
       |> Enum.reduce(%{marbles: [0], index_to_add: 1, players: players}, &add_marble/2)
+     # |> get_highest_score()
     end
 
     def get_highest_score(%{players: players}) do
