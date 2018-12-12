@@ -18,6 +18,7 @@ defmodule Day09Alt do
       current_index = index_to_add - 7 - 2
 
       {score, new_marbles} = List.pop_at(marbles, current_index)
+      trimmed_marbles = Enum.slice(new_marbles, current_index..(length(new_marbles) - 1))
 
       [{player_id, high_score} | rest] = players
 
@@ -25,7 +26,7 @@ defmodule Day09Alt do
 
       new_players = rest ++ [{player_id, new_high_score}]
 
-      %{marbles: new_marbles, index_to_add: current_index + 2, players: new_players}
+      %{marbles: trimmed_marbles, index_to_add: 0, players: new_players}
     end
 
     def add_marble(marble_to_add, %{marbles: marbles, index_to_add: index_to_add, players: players}) do
