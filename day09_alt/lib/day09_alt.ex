@@ -44,6 +44,7 @@ defmodule Day09Alt do
 
       1..limit
       |> Enum.reduce(%{marbles: [0], index_to_add: 1, players: players}, &add_marble/2)
+     # |> get_highest_score()
     end
 
     def get_highest_score(%{players: players}) do
