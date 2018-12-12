@@ -32,26 +32,116 @@ defmodule Day10Test do
  #   assert actual == expected
  # end
 
-  test "get bounding box size for points after 1 second", context do
-    actual =
-    context[:points_after_1_second]
-    |> Part1.get_bounding_box()
-    |> Part1.get_bounding_box_size()
 
-    expected = 126
+# current is completely inside prev, keep going
+# current is not complete inside prev, return prev
 
-    assert expected == actual
+#  test "current y is bigger than prev" do
+
+#  end
+
+#  test "current y is smaller than prev" do
+
+#  end
+  test "current biggest x is greater than prev biggest x, so it is not inside" do
+    prev = %{
+      smallest_x: -10,
+      smallest_y: -10,
+      biggest_x: 10,
+      biggest_y: 10
+    }
+
+    current = %{
+      smallest_x: -5,
+      smallest_y: -5,
+      biggest_x: 15,
+      biggest_y: 5
+    }
+
+    actual = current |> Part1.is_not_inside_of(prev)
+
+    assert actual == true
   end
 
-  test "get bounding box size for initial points ", context do
-    actual =
-    context[:initial_points]
-    |> Part1.get_bounding_box()
-    |> Part1.get_bounding_box_size()
+test "current smallest x is less than prev smallest x, so it is not inside" do
+  prev = %{
+    smallest_x: -10,
+    smallest_y: -10,
+    biggest_x: 10,
+    biggest_y: 10
+  }
 
-    expected = 56
+  current = %{
+    smallest_x: -15,
+    smallest_y: -5,
+    biggest_x: 5,
+    biggest_y: 5
+  }
 
-    assert expected == actual
+  actual = current |> Part1.is_not_inside_of(prev)
+
+  assert actual == true
+end
+
+
+test "current smallest y is less than prev smallest y, so it is not inside" do
+  prev = %{
+    smallest_x: -10,
+    smallest_y: -10,
+    biggest_x: 10,
+    biggest_y: 10
+  }
+
+  current = %{
+    smallest_x: -5,
+    smallest_y: -15,
+    biggest_x: 5,
+    biggest_y: 5
+  }
+
+  actual = current |> Part1.is_not_inside_of(prev)
+
+  assert actual == true
+end
+
+  test "current biggest y is greater than prev biggest y, so it is not inside" do
+    prev = %{
+      smallest_x: -10,
+      smallest_y: -10,
+      biggest_x: 10,
+      biggest_y: 10
+    }
+
+    current = %{
+      smallest_x: -5,
+      smallest_y: -5,
+      biggest_x: 5,
+      biggest_y: 15
+    }
+
+    actual = current |> Part1.is_not_inside_of(prev)
+
+    assert actual == true
+  end
+
+  test "current is inside of prev" do
+    prev = %{
+      smallest_x: -10,
+      smallest_y: -10,
+      biggest_x: 10,
+      biggest_y: 10
+    }
+
+    current = %{
+      smallest_x: -5,
+      smallest_y: -5,
+      biggest_x: 5,
+      biggest_y: 5
+    }
+
+    actual = current |> Part1.is_not_inside_of(prev)
+
+    refute actual == true
   end
 
   test "get bounding box positions for points after 1 second", context do
@@ -151,3 +241,7 @@ defmodule Day10Test do
     assert actual == expected
   end
 end
+
+
+
+#

@@ -21,8 +21,76 @@ defmodule Day10.Part1 do
   end
 
   def run(file_name) do
-    file_name
-    |> init_points()
+    first_points = init_points(file_name)
+    first_bounding_box = get_bounding_box(first_points)
+
+    translated_positions =
+      first_points
+      |> loop(first_bounding_box)
+      |> create_graphics()
+      |> write_to_file()
+
+  end
+
+  def init_grid({width, height}) do
+    for y <- 0..height, do: List.duplicate(".", width + 1)
+  end
+
+  def get_dimensions(bounding_box) do
+    width = abs(bounding_box.biggest_x) + abs(bounding_box.smallest_x)
+    height = abs(bounding_box.biggest_y) + abs(bounding_box.smallest_y)
+
+    {width, height}
+  end
+
+  def create_graphics({positions, bounding_box}) do
+    grid = bounding_box |> get_dimensions() |> init_grid()
+
+    positions
+    |> Enum.reduce(grid, fn {x, y}, acc ->
+        new_row = Enum.at(acc, y) |> List.replace_at(x, "#")
+        List.replace_at(acc, y, new_row)
+    end)
+    |> Enum.map(fn row -> Enum.join(row, "") end)
+    |> Enum.join("\n")
+  end
+
+  def translate_to_display({positions, bounding_box}) do
+    min_x = bounding_box.smallest_x
+    min_y = bounding_box.smallest_y
+
+    translated =
+      positions
+      |> Enum.map(fn {x, y} ->
+          new_x = cond do
+            x > 0 -> x - abs(min_x)
+            x <= 0 -> x + abs(min_x)
+          end
+
+          new_y = cond do
+            y > 0 -> y - abs(min_y)
+            y <= 0 -> + abs(min_y)
+          end
+
+          {new_x, new_y}
+      end)
+
+      {translated, bounding_box}
+  end
+
+# current is completely inside prev, keep going
+# current is not complete inside prev, return prev
+
+  def loop(prev_points, prev_bounding_box) do
+    new_points = apply_velocities(prev_points)
+    new_bounding_box = get_bounding_box(new_points)
+
+    if is_not_inside_of(new_bounding_box, prev_bounding_box) do
+      positions = prev_points |> Enum.map(fn %{position: position} -> position end)
+      {positions, prev_bounding_box}
+    else
+      loop(new_points, new_bounding_box)
+    end
   end
 
   def init_points(file_name) do
@@ -36,10 +104,15 @@ defmodule Day10.Part1 do
   #
   #end
 
-  def get_bounding_box_size(bounding_box) do
-    width = abs(bounding_box.smallest_x - bounding_box.biggest_x)
-    height = abs(bounding_box.smallest_y - bounding_box.biggest_y)
-    width * height
+  # current is completely inside prev, keep going
+# current is not complete inside prev, return prev
+
+
+  def is_not_inside_of(current, prev) do
+    current.biggest_y > prev.biggest_y ||
+    current.smallest_y < prev.smallest_y ||
+    current.biggest_x > prev.biggest_x ||
+    current.smallest_x < prev.smallest_x
   end
 
   def get_smallest(first, second), do: if first <= second, do: first, else: second
