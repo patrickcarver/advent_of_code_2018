@@ -1,30 +1,43 @@
 defmodule Day11 do
+  # 4842
 
-  alias Day11.{Part1, Part2}
+  defmodule FuelCell do
+    def get_power_level({x, y}, grid_serial_number) do
+      rack_id = x + 10
 
-  def run(part: part, mode: mode) do
-    mode
-    |> get_input_file_name()
-    |> run_selected(part)
+      rack_id
+      |> Kernel.*(y)
+      |> Kernel.+(grid_serial_number)
+      |> Kernel.*(rack_id)
+      |> get_hundreds_digit()
+      |> Kernel.-(5)
+    end
+
+    defp get_hundreds_digit(number) do
+      digit = number |> Integer.digits() |> Enum.at(-3)
+      if digit == nil, do: 0, else: digit
+    end
   end
 
-  defp get_input_file_name(:prod), do: "input.txt"
-  defp get_input_file_name(:test), do: "test.txt"
-  defp get_input_file_name(_mode), do: {:error, :invalid_mode}
 
-  defp run_selected({:error, :invalid_mode} = error, _part) do
-    error
+  def run_live() do
+    width = 300
+    height = 300
+    grid_serial_number = 4842
+    run(width, height, grid_serial_number)
   end
 
-  defp run_selected(input_file_name, 1) do
-    Part1.run(input_file_name)
+  def run(width, height, grid_serial_number) do
+
+
+    travel_grid(width-2, height-2, grid_serial_number)
+
   end
 
-  defp run_selected(input_file_name, 2) do
-    Part2.run(input_file_name)
-  end
+  def travel_grid(max_x, max_y, grid_serial_number) do
+    # largest_total_power
+    # coord_with_largest_total_power
 
-  defp run_selected(_input_file_name, _invalid_part) do
-    {:error, :invalid_part}
+
   end
 end
