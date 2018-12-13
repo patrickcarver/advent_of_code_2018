@@ -33,8 +33,7 @@ defmodule Day10Test do
  # end
 
 
-# current is completely inside prev, keep going
-# current is not complete inside prev, return prev
+
 
 #  test "current y is bigger than prev" do
 

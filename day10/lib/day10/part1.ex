@@ -24,12 +24,10 @@ defmodule Day10.Part1 do
     first_points = init_points(file_name)
     first_bounding_box = get_bounding_box(first_points)
 
-    translated_positions =
-      first_points
-      |> loop(first_bounding_box)
-      |> create_graphics()
-      |> write_to_file()
-
+    first_points
+    |> loop(first_bounding_box, 0)
+    |> create_graphics()
+    |> write_to_file()
   end
 
   def init_grid({width, height}) do
@@ -81,15 +79,16 @@ defmodule Day10.Part1 do
 # current is completely inside prev, keep going
 # current is not complete inside prev, return prev
 
-  def loop(prev_points, prev_bounding_box) do
+  def loop(prev_points, prev_bounding_box, seconds) do
     new_points = apply_velocities(prev_points)
     new_bounding_box = get_bounding_box(new_points)
 
     if is_not_inside_of(new_bounding_box, prev_bounding_box) do
       positions = prev_points |> Enum.map(fn %{position: position} -> position end)
+      IO.inspect seconds
       {positions, prev_bounding_box}
     else
-      loop(new_points, new_bounding_box)
+      loop(new_points, new_bounding_box, seconds + 1)
     end
   end
 
