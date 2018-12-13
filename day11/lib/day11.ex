@@ -29,15 +29,35 @@ defmodule Day11 do
 
   def run(width, height, grid_serial_number) do
 
-
     travel_grid(width-2, height-2, grid_serial_number)
-
   end
 
   def travel_grid(max_x, max_y, grid_serial_number) do
-    # largest_total_power
-    # coord_with_largest_total_power
+    1..max_y
+    |> Enum.reduce(%{coord: {1, 1}, power_level: 0}, fn y, y_acc ->
+      x_largest = 1..max_x
+                  |> Enum.reduce(%{coord: {1, y}, power_level: 0}, fn x, x_acc ->
+                    current_power = create_power_levels(x, x+2, y, y+2, grid_serial_number) |> Enum.sum()
 
+                    if x_acc.power_level < current_power do
+                      %{coord: {x, y}, power_level: current_power}
+                    else
+                      x_acc
+                    end
+                  end)
 
+      if y_acc.power_level < x_largest.power_level do
+        %{coord: x_largest.coord, power_level: x_largest.power_level}
+      else
+        y_acc
+      end
+
+    end)
+  end
+
+  def create_power_levels(start_x, end_x, start_y, end_y, grid_serial_number) do
+    for y <- start_y..end_y, x <- start_x..end_x do
+      FuelCell.get_power_level({x, y}, grid_serial_number)
+    end
   end
 end
