@@ -25,9 +25,16 @@ defmodule Day10.Part1 do
     first_bounding_box = get_bounding_box(first_points)
 
     first_points
+<<<<<<< HEAD
     |> loop(first_bounding_box, 0)
     |> create_graphics()
     |> write_to_file()
+=======
+    |> loop(first_bounding_box)
+    |> create_graphics()
+    |> write_to_file()
+
+>>>>>>> 84b5cf589a0fc9be75493f3c25ab15629668fb92
   end
 
   def init_grid({width, height}) do
@@ -53,29 +60,6 @@ defmodule Day10.Part1 do
     |> Enum.join("\n")
   end
 
-  def translate_to_display({positions, bounding_box}) do
-    min_x = bounding_box.smallest_x
-    min_y = bounding_box.smallest_y
-
-    translated =
-      positions
-      |> Enum.map(fn {x, y} ->
-          new_x = cond do
-            x > 0 -> x - abs(min_x)
-            x <= 0 -> x + abs(min_x)
-          end
-
-          new_y = cond do
-            y > 0 -> y - abs(min_y)
-            y <= 0 -> + abs(min_y)
-          end
-
-          {new_x, new_y}
-      end)
-
-      {translated, bounding_box}
-  end
-
 # current is completely inside prev, keep going
 # current is not complete inside prev, return prev
 
@@ -99,12 +83,8 @@ defmodule Day10.Part1 do
   end
 
 
-  #def translate_points_for_display(points) do
-  #
-  #end
-
   # current is completely inside prev, keep going
-# current is not complete inside prev, return prev
+  # current is not complete inside prev, return prev
 
 
   def is_not_inside_of(current, prev) do
@@ -138,7 +118,9 @@ defmodule Day10.Part1 do
   end
 
   def write_to_file(string_to_write) do
-    File.write!("../../txt/output.txt"|> Path.expand(__DIR__), string_to_write)
+    "../../txt/output.txt"
+    |> Path.expand(__DIR__)
+    |> File.write!(string_to_write)
   end
 
   def apply_velocities(points) do
