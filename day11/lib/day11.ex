@@ -20,24 +20,51 @@ defmodule Day11 do
   end
 
 
-  def run_live() do
-    width = 300
-    height = 300
+
+
+  def run_part1() do
+    grid_length = 300
+    square_size = 3
     grid_serial_number = 4842
-    run(width, height, grid_serial_number)
+
+    travel_grid(grid_length, square_size, grid_serial_number)
   end
 
-  def run(width, height, grid_serial_number) do
+  def run_part2() do
+    grid_length = 300
+    grid_serial_number = 4842
 
-    travel_grid(width-2, height-2, grid_serial_number)
+    find_largest_amongst_squares(grid_length, grid_serial_number)
   end
 
-  def travel_grid(max_x, max_y, grid_serial_number) do
+  def find_largest_amongst_squares(grid_length, grid_serial_number) do
+    max_square_size = grid_length
+
+    1..max_square_size
+    |> Enum.reduce(%{coord: nil, power_level: 0, square_size: nil},  fn square_size, acc ->
+      current = travel_grid(grid_length, square_size, grid_serial_number)
+
+      result = if acc.power_level < current.power_level do
+        %{coord: current.coord, power_level: current.power_level, square_size: square_size}
+      else
+        acc
+      end
+      IO.inspect result
+      result
+    end)
+  end
+
+  def travel_grid(grid_length, square_size, grid_serial_number) do
+    offset = square_size - 1
+
+    max_x = grid_length - offset
+    max_y = grid_length - offset
+
     1..max_y
     |> Enum.reduce(%{coord: {1, 1}, power_level: 0}, fn y, y_acc ->
       x_largest = 1..max_x
                   |> Enum.reduce(%{coord: {1, y}, power_level: 0}, fn x, x_acc ->
-                    current_power = create_power_levels(x, x+2, y, y+2, grid_serial_number) |> Enum.sum()
+                    current_power = create_power_levels(x, x+offset, y, y+offset, grid_serial_number) |> Enum.sum()
 
                     if x_acc.power_level < current_power do
                       %{coord: {x, y}, power_level: current_power}
@@ -53,6 +80,7 @@ defmodule Day11 do
       end
 
     end)
+    |> Map.put(:square_size, square_size)
   end
 
   def create_power_levels(start_x, end_x, start_y, end_y, grid_serial_number) do
