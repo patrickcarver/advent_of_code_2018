@@ -19,33 +19,35 @@ defmodule Day11 do
     end
   end
 
-#  def find_fuel_cell(grid, square_size) do
-#    offset = square_size - 1
-
-#    grid
-#    |> Enum.reduce(%{coord: nil, power_level: 0}, fn y, y_acc ->
-#      x_largest =
-#    end)
-#  end
-
-
-
-
   def run_part1() do
     grid_length = 300
-    square_size = 3
     grid_serial_number = 4842
+    square_size = 3
 
+    run(grid_length, grid_serial_number, square_size)
+  end
+
+  def run(grid_length, grid_serial_number, square_size) do
     grid_length
     |> create_grid(grid_serial_number)
     |> find_largest(grid_length, square_size)
   end
 
   def run_part2() do
-  #  grid_length = 300
-  #  grid_serial_number = 4842
+    grid_length = 300
+    grid_serial_number = 4842
+    grid = create_grid(grid_length, grid_serial_number)
 
-
+    Task.async_stream(
+      1..grid_length,
+      fn square_size ->
+        result = find_largest(grid, grid_length, square_size)
+        IO.inspect result
+        result
+      end,
+      [timeout: 1000 * 60 * 60, max_occurances: 300]
+    )
+    |> Enum.to_list
   end
 
   def create_grid(size, grid_serial_number) do
@@ -69,19 +71,19 @@ defmodule Day11 do
     max_y = grid_dimension - offset
 
     1..max_y
-    |> Enum.reduce(%{coord: nil, power_level: 0}, fn y, y_acc ->
+    |> Enum.reduce(%{coord: nil, power_level: nil}, fn y, y_acc ->
           x_largest = 1..max_x
-                      |> Enum.reduce(%{coord: nil, power_level: 0}, fn x, x_acc ->
+                      |> Enum.reduce(%{coord: nil, power_level: nil}, fn x, x_acc ->
                             square_power_level = get_square_power_level(grid, x, x+offset, y, y+offset)
 
-                            if x_acc.power_level < square_power_level do
+                            if x_acc.power_level < square_power_level or x_acc.power_level == nil do
                               %{coord: {x, y}, power_level: square_power_level}
                             else
                               x_acc
                             end
                          end)
 
-          if y_acc.power_level < x_largest.power_level do
+          if y_acc.power_level < x_largest.power_level or y_acc.power_level == nil do
             x_largest
           else
             y_acc
