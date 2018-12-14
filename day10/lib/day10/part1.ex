@@ -25,16 +25,9 @@ defmodule Day10.Part1 do
     first_bounding_box = get_bounding_box(first_points)
 
     first_points
-<<<<<<< HEAD
     |> loop(first_bounding_box, 0)
     |> create_graphics()
     |> write_to_file()
-=======
-    |> loop(first_bounding_box)
-    |> create_graphics()
-    |> write_to_file()
-
->>>>>>> 84b5cf589a0fc9be75493f3c25ab15629668fb92
   end
 
   def init_grid({width, height}) do
