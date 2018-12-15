@@ -1,48 +1,27 @@
 defmodule Day08.Part1 do
   alias FileLoader
 
-  defmodule Node do
-    defstruct [
-      total_children: nil,
-      total_entries: nil,
-      children: [],
-      entries: []
-    ]
-  end
-
   def run(file_name) do
-    nums = get_nums(file_name)
-
-   # create_node(nil, nums)
+    { root, [] } =
+      file_name
+      |> get_nums()
+      |> create_node()
+    root
   end
 
-  def create_tree(node, []) do
-    node
+  def create_node([num_of_children, num_of_metadata | rest]) do
+    { children, new_rest } = create_children(num_of_children, rest, [])
+    { metadata, new_new_rest } = Enum.split(new_rest, num_of_metadata)
+    { { children, metadata }, new_new_rest }
   end
 
-
-
-  def create_tree(parent, nums) do
-    [total_children, total_entries | rest] = nums
-
-    node = %Node{total_children: total_children, total_entries: total_entries}
-
-    if total_children == 0 do
-      {entries, new_rest} = Enum.split(rest, total_entries)
-      updated_node = %Node{node | entries: entries}
-      create_tree(updated_node, new_rest)
-    else
-      handle_children(node, total_children, rest)
-    end
+  def create_children(0, rest, acc) do
+    { Enum.reverse(acc), rest }
   end
 
-  def handle_children(parent, 0, nums) do
-    create_tree(parent, nums)
-  end
-
-  def handle_children(parent, count, nums) do
-
-    handle_children(parent, count -1, )
+  def create_children(count, rest, acc) do
+   { node, new_rest } = create_node(rest)
+   create_children(count - 1, new_rest, [node | acc])
   end
 
   def get_nums(file_name) do
@@ -50,6 +29,7 @@ defmodule Day08.Part1 do
     |> FileLoader.load()
     |> List.first()
     |> String.split(" ")
+    |> Enum.map(&String.to_integer/1)
   end
 end
 
