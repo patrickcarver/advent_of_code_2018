@@ -2,6 +2,11 @@ defmodule Day08.Part1 do
   alias FileLoader
 
   def run(file_name) do
+    create_tree(file_name)
+    |> sum_metadata()
+  end
+
+  def create_tree(file_name) do
     { root, [] } =
       file_name
       |> get_nums()
@@ -22,6 +27,16 @@ defmodule Day08.Part1 do
   def create_children(count, rest, acc) do
    { node, new_rest } = create_node(rest)
    create_children(count - 1, new_rest, [node | acc])
+  end
+
+  def sum_metadata(tree) do
+    sum_metadata(tree, 0)
+  end
+
+  def sum_metadata({children, metadata}, acc) do
+    sum_children = Enum.reduce(children, 0, &sum_metadata/2)
+    sum = Enum.sum(metadata)
+    sum_children + sum + acc
   end
 
   def get_nums(file_name) do
