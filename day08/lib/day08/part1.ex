@@ -1,6 +1,8 @@
 defmodule Day08.Part1 do
   alias FileLoader
 
+  # based on Jose Valim's walkthrough found at https://www.twitch.tv/videos/346803810
+
   def run(file_name) do
     create_tree(file_name)
     |> sum_metadata()

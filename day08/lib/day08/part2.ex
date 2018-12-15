@@ -3,7 +3,7 @@ defmodule Day08.Part2 do
 
   def run(file_name) do
     create_tree(file_name)
-    |> sum_metadata()
+    |> find_value()
   end
 
   def create_tree(file_name) do
@@ -29,14 +29,19 @@ defmodule Day08.Part2 do
    create_children(count - 1, new_rest, [node | acc])
   end
 
-  def sum_metadata(tree) do
-    sum_metadata(tree, 0)
+  def find_value({[], metadata}) do
+    Enum.sum(metadata)
   end
 
-  def sum_metadata({children, metadata}, acc) do
-    sum_children = Enum.reduce(children, 0, &sum_metadata/2)
-    sum = Enum.sum(metadata)
-    sum_children + sum + acc
+  def find_value({children, metadata}) do
+    indexed_sums = Enum.map(children, &find_value/1)
+
+    sums =
+      for index <- metadata,
+        sum = Enum.at(indexed_sums, index - 1),
+        do: sum
+
+    Enum.sum(sums)
   end
 
   def get_nums(file_name) do
