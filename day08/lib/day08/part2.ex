@@ -36,12 +36,9 @@ defmodule Day08.Part2 do
   def find_value({children, metadata}) do
     indexed_sums = Enum.map(children, &find_value/1)
 
-    sums =
-      for index <- metadata,
-        sum = Enum.at(indexed_sums, index - 1),
-        do: sum
-
-    Enum.sum(sums)
+    Enum.reduce(metadata, 0, fn index, acc ->
+      Enum.at(index_sums, index - 1, 0)
+    end)
   end
 
   def get_nums(file_name) do
