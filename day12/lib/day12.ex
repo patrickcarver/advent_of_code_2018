@@ -46,11 +46,6 @@ defmodule Day12 do
                 |> Enum.reverse()
                 |> Enum.drop_while(fn {token, _pot_index} -> token == "." end)
 
-    {{_, min}, {_, max}} = new_pots |> Enum.min_max_by(fn {_, index} -> index end)
-    IO.inspect "#{gen_num} #{min} #{max}"
-    #string = new_pots |> Enum.map(fn {token, _index} -> token end) |> Enum.join("")
-    #IO.inspect(string)
-
     generation(new_pots, notes, gen_num + 1, gen_limit)
   end
 
