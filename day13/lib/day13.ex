@@ -10,6 +10,7 @@ defmodule Day13 do
 
   defp get_input_file_name(:prod), do: "input.txt"
   defp get_input_file_name(:test), do: "test.txt"
+  defp get_input_file_name(:test2), do: "part2_test.txt"
   defp get_input_file_name(_mode), do: {:error, :invalid_mode}
 
   defp run_selected({:error, :invalid_mode} = error, _part) do

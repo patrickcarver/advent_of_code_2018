@@ -6,17 +6,7 @@ defmodule Day13.Part1 do
     file_name
     |> process_input()
     |> tick_through()
-  #  |> tick_through(2)
-  #  |> tick_through(3)
-  #  |> tick_through(4)
-  #  |> tick_through(5)
-  #  |> tick_through(6)
-  #  |> Map.get(:carts)
   end
-
-  # 0: left
-  # 1: straight
-  # 2: right
 
   def tick_through(%{rails: rails, carts: carts}, tick \\ 1) do
     sorted_carts = sort_carts(carts)
@@ -43,7 +33,7 @@ defmodule Day13.Part1 do
       %{moved: updated_carts} ->
         tick_through(%{rails: rails, carts: updated_carts}, tick + 1)
       coord ->
-        coord
+        {coord, tick}
     end
   end
 
