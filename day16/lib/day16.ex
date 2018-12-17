@@ -1,6 +1,6 @@
 defmodule Day16 do
 
-  alias Day10.{Part1, Part2}
+  alias Day16.{Part1, Part2}
 
   def run(part: part, mode: mode) do
     mode
