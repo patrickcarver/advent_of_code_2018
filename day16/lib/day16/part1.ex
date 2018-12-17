@@ -4,7 +4,13 @@ defmodule Day16.Part1 do
   defmodule Opcode do
     use Bitwise
 
-    # [0] [1] [2] [3]
+    def get_functions() do
+      :functions
+      |> __MODULE__.__info__()
+      |> Enum.map(fn {name, _arity} -> name end)
+      |> Enum.reject(fn name -> name == :get_functions end)
+    end
+
     # (add register) stores into register C the result of adding register A and register B.
     def addr(register, [_opcode, a, b, c]) do
       %{register | c => register[a] + register[b]}
@@ -87,8 +93,17 @@ defmodule Day16.Part1 do
   end
 
   def run(file_name) do
-    file_name
-    |> load_samples()
+    samples = file_name |> load_samples()
+    opcodes = Opcode.get_functions()
+
+    Enum.map(samples, fn %{before: before, after: aftr, instruction: instruction} ->
+      Enum.reduce(opcodes, 0, fn opcode, acc ->
+        result = apply(Opcode, opcode, [before, instruction])
+        if result == aftr, do: acc + 1, else: acc
+      end)
+    end)
+    |> Enum.filter(fn result -> result >= 3 end)
+    |> Enum.count()
   end
 
   def load_samples(file_name) do
