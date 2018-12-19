@@ -129,8 +129,8 @@ defmodule Day16.Part2 do
     |> figure_out_opcode_nums([])
   end
 
-  def process_test({registers, [], _opcode_lookup}) do
-    registers
+  def process_test({%{0 => result}, [], _opcode_lookup}) do
+    result
   end
 
   def process_test({registers, test_data, opcode_lookup}) do
