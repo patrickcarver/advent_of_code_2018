@@ -1,51 +1,36 @@
 defmodule Day14 do
   def run(num_recipes) do
-    limit = num_recipes + 10 + 1
+    limit = num_recipes + 10
 
-    recipes = [3,7]
-    elf_one_index = 0
-    elf_two_index = 1
+    create_recipes({[3,7], 0, 1}, limit)
+    |> Enum.take(limit)
+    |> Enum.take(-10)
+    |> Enum.join("")
+   # |> Enum.reverse()
+   # |> Enum.join("")
 
-    {recipes, elf_one_index, elf_two_index}
-    |> create_new_recipes()
-    |> create_new_recipes()
-    |> create_new_recipes()
-    |> create_new_recipes()
 
   end
 
-  def create_new_recipes({recipes, elf_one_index, elf_two_index}) do
-    current1 = Enum.at(recipes, elf_one_index)
-    current2 = Enum.at(recipes, elf_two_index)
-
-    result = (current1 + current2) |> Integer.digits()
-    new_recipes = recipes ++ result
-
-    new_elf_one_index = rem((1 + current1), length(new_recipes)) + elf_one_index
-    new_elf_two_index = rem((1 + current2), length(new_recipes)) + elf_two_index
-
-    IO.inspect 1 + current1
-    IO.inspect length(new_recipes)
-    IO.inspect rem((1 + current1), length(new_recipes))
-    IO.inspect elf_one_index
-    IO.inspect "######"
-
-    {new_recipes, new_elf_one_index, new_elf_two_index}
+  def create_recipes({recipes, _elf_one_index, _elf_two_index}, limit) when length(recipes) >= limit do
+    recipes
   end
+
+  def create_recipes({recipes, elf_one_index, elf_two_index}, limit) do
+    elf_one_current_recipe = Enum.at(recipes, elf_one_index)
+    elf_two_current_recipe = Enum.at(recipes, elf_two_index)
+
+    recipes_to_add = (elf_one_current_recipe + elf_two_current_recipe) |> Integer.digits()
+    updated_recipes = recipes ++ recipes_to_add
+
+    len = length(updated_recipes)
+    IO.inspect len
+
+    updated_elf_one_index = rem((elf_one_index + (1 + elf_one_current_recipe)), len)
+    updated_elf_two_index = rem((elf_two_index + (1 + elf_two_current_recipe)), len)
+
+    create_recipes({updated_recipes, updated_elf_one_index, updated_elf_two_index}, limit)
+
+  end
+
 end
-
-
-
-
-# num_recipes
-# current_recipes
-# score_board
-
-# first elf creates recipe
-# second elf creates recipe
-# add their scores together
-# take that sum and break apart digits
-# add digits to end of scoreboard
-# move elves to new current recipe
-  # 1 + score of current recipe
-  # if that run out, they loop back to beginning
