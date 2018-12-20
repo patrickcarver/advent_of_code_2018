@@ -4,7 +4,7 @@ defmodule Day18.Part1 do
   def run(file_name) do
     file_name
     |> create_lumber_area()
-    |> pass_minute(1, 10)
+    |> pass_minute(1, 20)
   end
 
   def scan_neighbors(lumber_area, {x, y}) do
