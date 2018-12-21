@@ -1,57 +1,24 @@
 defmodule Day09Alt do
+  def run(num_players, limit) do
+    state = %{
+      num_players: num_players,
+      current_marble: 1,
+      limit: limit,
+      marbles: %{0 => 0}
+    }
 
-  defmodule Part1 do
-    defmodule PlayerCycle do
-      def create(num_players) do
-        Enum.zip(1..num_players, List.duplicate(0, num_players))
-      end
-
-      def rotate(cycle) do
-        [head | tail] = cycle
-        tail ++ [head]
-      end
-
-    end
-
-
-    def add_marble(marble_to_add, %{marbles: marbles, index_to_add: index_to_add, players: players}) when rem(marble_to_add, 23) == 0 do
-      current_index = index_to_add - 7 - 2
-
-      {score, new_marbles} = List.pop_at(marbles, current_index)
-      trimmed_marbles = Enum.slice(new_marbles, current_index..(length(new_marbles) - 1))
-
-      [{player_id, high_score} | rest] = players
-
-      new_high_score = high_score + marble_to_add + score
-
-      new_players = rest ++ [{player_id, new_high_score}]
-
-      %{marbles: trimmed_marbles, index_to_add: 0, players: new_players}
-    end
-
-    def add_marble(marble_to_add, %{marbles: marbles, index_to_add: index_to_add, players: players}) do
-      new_marbles = List.insert_at(marbles, index_to_add, marble_to_add)
-      next_index_to_add =
-        if List.last(new_marbles) == marble_to_add, do: 1, else: index_to_add + 2
-
-      new_players = PlayerCycle.rotate(players)
-
-      %{marbles: new_marbles, index_to_add: next_index_to_add, players: new_players}
-    end
-
-    def run(num_players, limit) do
-      players = PlayerCycle.create(num_players)
-
-      1..limit
-      |> Enum.reduce(%{marbles: [0], index_to_add: 1, players: players}, &add_marble/2)
-     # |> get_highest_score()
-    end
-
-    def get_highest_score(%{players: players}) do
-      players |> Enum.reduce(0, fn {_id, score}, high_score ->
-        if score > high_score, do: score, else: high_score
-      end)
-    end
+    play_turn(state)
   end
 
+  def play_turn(%{limit: limit}) when current_marble > limit do
+
+  end
+
+  def play_turn(state) do
+    # %{0 => 0}
+    # %{0 => 1, 1 => 0}
+    # %{0 => 2, 1 => 0, 2 => 1}
+    # %{0 => 2, 1 => 3, 2 => 1, 3 => 0}
+    # %{0 => 4, 4 => 2, 2 => 1, 1 => 3, 3 => 0}
+  end
 end

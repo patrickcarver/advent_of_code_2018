@@ -1,32 +1,52 @@
 defmodule Day09Alt2 do
 
-  def process(marble_to_add, acc) when rem(marble_to_add, 23) == 0 do
-    current_player = rem(marble_to_add, acc.num_players) - 1
-    current_index = acc.last_index - 7
-    score = Enum.at(acc.marbles, current_index)
-    new_scores = Map.update(acc.scores, current_player, 0, &(&1 + score + marble_to_add))
-    new_marbles = Enum.drop(acc.marbles, current_index + 1)
-    %{marbles: new_marbles, last_index: 0, scores: new_scores, num_players: acc.num_players }
-  end
+  def run(num_players, limit) do
+    players = create_players(num_players)
 
-  def process(marble_to_add, acc) do
-    current_index  =
-      if length(acc.marbles) - 1 == acc.last_index, do: 1, else: acc.last_index + 2
-
-    new_marbles = List.insert_at(acc.marbles, current_index, marble_to_add)
-    %{marbles: new_marbles, last_index: current_index, scores: acc.scores, num_players: acc.num_players}
-  end
-
-  def run(players, limit) do
-    scores = create_scores(players)
+    state = %{
+      marbles: [0],
+      last_index: 0,
+      players: players,
+      num_players: num_players
+    }
 
     1..limit
-    |> Enum.reduce(%{marbles: [0], last_index: 0, scores: scores, num_players: players}, &process/2)
+    |> Enum.reduce(state, &process_marble/2)
+    |> Map.get(:players)
+    |> Enum.map(fn {_index, score} -> score end)
+    |> Enum.max()
   end
 
-  def create_scores(players) do
-    0..(players-1)
-    |> Enum.map(fn item -> {item, 0} end)
-    |> Enum.into(%{})
+  # current_player = rem(marble_to_add - 1, state.num_players)
+
+  def get_mod_23_index(%{marbles: marbles, last_index: last_index}) do
+    len = length(marbles)
+
+    if last_index < 7 do
+      len + (last_index - 7)
+    else
+      last_index - 7
+    end
+  end
+
+  def process_marble(marble_to_add, state) when rem(marble_to_add, 23) == 0 do
+    index = get_mod_23_index(state)
+    {score_to_add, new_marbles} = List.pop_at(state.marbles, index)
+    current_player = rem(marble_to_add - 1, state.num_players)
+    player_score = state.players[current_player]
+    updated_score = player_score + score_to_add + marble_to_add
+    updated_players = Map.put(state.players, current_player, updated_score)
+    %{state | marbles: new_marbles, last_index: index, players: updated_players}
+  end
+
+  def process_marble(marble_to_add, state) do
+    index = if Enum.at(state.marbles, state.last_index + 1) == nil, do: 1, else: state.last_index + 2
+    new_marbles = List.insert_at(state.marbles, index, marble_to_add)
+    %{state | marbles: new_marbles, last_index: index}
+  end
+
+  def create_players(num_players) do
+    0..(num_players-1)
+    |> Enum.reduce(%{}, fn num, acc -> Map.put(acc, num, 0) end)
   end
 end
