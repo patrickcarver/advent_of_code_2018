@@ -95,6 +95,7 @@ defmodule Day09Alt do
   end
 
   def play_turn(%{turn: turn} = state) when rem(turn, 23) == 0 do
+    # lol
     one = state.marbles |> Map.fetch!(state.current_marble) |> Map.fetch!(:counter)
     two = state.marbles |> Map.fetch!(one) |> Map.fetch!(:counter)
     three = state.marbles |> Map.fetch!(two) |> Map.fetch!(:counter)
