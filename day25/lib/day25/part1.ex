@@ -7,6 +7,10 @@ defmodule Day25.Part1 do
     |> parse()
     |> build_constellations_from_coords([])
     |> merge_constellations([])
+    |> merge_constellations([])
+    |> merge_constellations([])
+    |> merge_constellations([])
+    |> Enum.count()
   end
 
   def merge_constellations(unmerged, merged) do
@@ -38,7 +42,8 @@ defmodule Day25.Part1 do
   end
 
   def update_constellations(constellations, coord) do
-    Enum.map(constellations, fn constellation ->
+    constellations
+    |> Enum.map(fn constellation ->
       if Enum.any?(constellation, fn element -> manhattan_distance(element, coord) <= 3 end) do
         MapSet.put(constellation, coord)
       else
@@ -52,7 +57,8 @@ defmodule Day25.Part1 do
   end
 
   def parse(list) do
-    Enum.map(list, fn line ->
+    list
+    |> Enum.map(fn line ->
       line
       |> String.split(",")
       |> Enum.map(&String.to_integer/1)
